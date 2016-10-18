@@ -17,6 +17,7 @@ public class VentanaJuego extends JFrame {
 	MundoJuego miMundo;        // Mundo del juego
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
+	public static boolean[] flechas=new boolean[4];//Array de booleanos que se actualizara para el movimiento
 
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
@@ -44,6 +45,10 @@ public class VentanaJuego extends JFrame {
 		// Formato de ventana
 		setSize( 1000, 750 );
 		setResizable( false );
+		
+		
+		
+		
 		// Escuchadores de botones
 		bAcelerar.addActionListener( new ActionListener() {
 			@Override
@@ -74,10 +79,52 @@ public class VentanaJuego extends JFrame {
 			}
 		});
 		
+		
+		
+		
+		
+		
+		
 		// Añadido para que también se gestione por teclado con el KeyListener
 		pPrincipal.addKeyListener( new KeyAdapter() {
+			
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
+				//0=arriba
+				//1-abajo
+				//2-izquierda
+				//3-derecha
+				
+				
+
+
+				switch (e.getKeyCode()) {
+				
+				case KeyEvent.VK_UP: {
+					flechas[0]=true;
+					break;
+				}
+				case KeyEvent.VK_DOWN: {
+					flechas[1]=true;
+					break;
+
+				}
+				case KeyEvent.VK_LEFT: {
+					flechas[2]=true;
+					
+					break;
+				}
+				case KeyEvent.VK_RIGHT: {
+					flechas[3]=true;
+					
+					break;
+				}
+			}
+				
+				
+				
+				/*
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP: {
 						miCoche.acelera( +5, 1 );
@@ -95,9 +142,41 @@ public class VentanaJuego extends JFrame {
 						miCoche.gira( -10 );
 						break;
 					}
+				}*/
+			}
+			
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				
+				case KeyEvent.VK_UP: {
+					flechas[0]=false;
+					break;
+				}
+				case KeyEvent.VK_DOWN: {
+					flechas[1]=false;
+					break;
+
+				}
+				case KeyEvent.VK_LEFT: {
+					flechas[2]=false;
+					
+					break;
+				}
+				case KeyEvent.VK_RIGHT: {
+					flechas[3]=false;
+					
+					break;
 				}
 			}
+			}
 		});
+		
+		
+		
+		
+		
+		
+		
 		pPrincipal.setFocusable(true);
 		pPrincipal.requestFocus();
 		pPrincipal.addFocusListener( new FocusAdapter() {
@@ -153,6 +232,18 @@ public class VentanaJuego extends JFrame {
 			while (sigo) {
 				// Mover coche
 				miCoche.mueve( 0.040 );
+				if(flechas[0]==true){miCoche.acelera( +5, 1 );}
+				
+				if(flechas[1]==true){miCoche.acelera( -5, 1 );}
+				
+				if(flechas[2]==true){miCoche.gira( +10 );}
+				
+				if(flechas[3]==true){miCoche.gira( -10 );}
+				
+				
+				
+				
+				
 				// Chequear choques
 				// (se comprueba tanto X como Y porque podría a la vez chocar en las dos direcciones (esquinas)
 				if (miMundo.hayChoqueHorizontal(miCoche)) // Espejo horizontal si choca en X
