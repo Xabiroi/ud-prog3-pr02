@@ -18,6 +18,7 @@ public class VentanaJuego extends JFrame {
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
 	public static boolean[] flechas=new boolean[4];//Array de booleanos que se actualizara para el movimiento
+	JLabel lMensaje;
 
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
@@ -27,63 +28,23 @@ public class VentanaJuego extends JFrame {
 		setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		// Creación contenedores y componentes
 		pPrincipal = new JPanel();
+		this.lMensaje = new JLabel(" ");
 		JPanel pBotonera = new JPanel();
-		JButton bAcelerar = new JButton( "Acelera" );
-		JButton bFrenar = new JButton( "Frena" );
-		JButton bGiraIzq = new JButton( "Gira Izq." );
-		JButton bGiraDer = new JButton( "Gira Der." );
+		pBotonera.add(this.lMensaje);
+		
+		
+
 		// Formato y layouts
 		pPrincipal.setLayout( null );
 		pPrincipal.setBackground( Color.white );
 		// Añadido de componentes a contenedores
 		add( pPrincipal, BorderLayout.CENTER );
-		pBotonera.add( bAcelerar );
-		pBotonera.add( bFrenar );
-		pBotonera.add( bGiraIzq );
-		pBotonera.add( bGiraDer );
 		add( pBotonera, BorderLayout.SOUTH );
 		// Formato de ventana
 		setSize( 1000, 750 );
 		setResizable( false );
 		
-		
-		
-		
-		// Escuchadores de botones
-		bAcelerar.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				miCoche.acelera( +10, 1 );
-				// System.out.println( "Nueva velocidad de coche: " + miCoche.getVelocidad() );
-			}
-		});
-		bFrenar.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				miCoche.acelera( -10, 1 );
-				// System.out.println( "Nueva velocidad de coche: " + miCoche.getVelocidad() );
-			}
-		});
-		bGiraIzq.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				miCoche.gira( +10 );
-				// System.out.println( "Nueva dirección de coche: " + miCoche.getDireccionActual() );
-			}
-		});
-		bGiraDer.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				miCoche.gira( -10 );
-				// System.out.println( "Nueva dirección de coche: " + miCoche.getDireccionActual() );
-			}
-		});
-		
-		
-		
-		
-		
-		
+	
 		
 		// Añadido para que también se gestione por teclado con el KeyListener
 		pPrincipal.addKeyListener( new KeyAdapter() {
@@ -250,7 +211,20 @@ public class VentanaJuego extends JFrame {
 				if(flechas[3]==true){miCoche.gira( -10 );}
 				
 				
-				
+				 int estrellasPerdidas = miMundo.quitaYRotaEstrellas(6000);
+			        if (estrellasPerdidas > 0)
+			        {
+			          String mensaje = "Puntos: "+miMundo.getPuntos();
+			          mensaje = mensaje + "  -  ESTRELLAS PERDIDAS: "+miMundo.getEstrellasPerdidas();
+			          lMensaje.setText(mensaje);
+			        }
+			        VentanaJuego.this.miMundo.creaEstrella();
+			        int choquesEstrellas = VentanaJuego.this.miMundo.choquesConEstrellas();
+			        if (choquesEstrellas > 0)
+			        {
+			          String mensaje = "Puntos: " + VentanaJuego.this.miMundo.getPuntos();
+			         lMensaje.setText(mensaje);
+			        }
 				
 				
 				
@@ -260,12 +234,27 @@ public class VentanaJuego extends JFrame {
 					miMundo.rebotaHorizontal(miCoche);
 				if (miMundo.hayChoqueVertical(miCoche)) // Espejo vertical si choca en Y
 					miMundo.rebotaVertical(miCoche);
+				
+				
+				
+				 if (MundoJuego.fin())
+			        {
+			          sigo = false;
+			          lMensaje.setText("SE ACABO EL JUEGO!!! Has sacado " + miMundo.getPuntos() + " puntos.");
+			          try
+			          {
+			            Thread.sleep(8000);
+			          }
+			          catch (Exception localException) {}
+			          VentanaJuego.this.dispose();
+			        }
 				// Dormir el hilo 40 milisegundos
 				try {
 					Thread.sleep( 40 );
-				} catch (Exception e) {
+				} catch (Exception e) {}
 				}
-			}
+				
+			
 		}
 		/** Ordena al hilo detenerse en cuanto sea posible
 		 */
