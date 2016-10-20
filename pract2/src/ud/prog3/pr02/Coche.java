@@ -11,6 +11,17 @@ public class Coche {
 	protected double posY;  // Posición en Y (vertical)
 	protected String piloto;  // Nombre de piloto
 	
+	
+	
+	
+	static final double masa=1;
+	static final double FuerzaBaseAdelante=2000;
+	static final double FuerzaBaseAtras=1000;
+	static final double coefRozSuelo=15.5;
+	static final double coefRozAire=0.35;
+			
+
+	
 	// Constructores
 	
 	public Coche() {
@@ -103,4 +114,31 @@ public class Coche {
 		return piloto + " (" + posX + "," + posY + ") - " +
 			   "Velocidad: " + miVelocidad + " ## Dirección: " + miDireccionActual; 
 	}
+	
+	/** Devuelve la fuerza de aceleración del coche, de acuerdo al motor definido en la práctica 2
+	 * @return Fuerza de aceleración en Newtixels
+	 */
+	 public double fuerzaAceleracionAdelante() {
+	 if (miVelocidad<=-150) return FuerzaBaseAdelante;
+	 else if (miVelocidad<=0)
+	 return FuerzaBaseAdelante*(-miVelocidad/150*0.5+0.5);
+	 else if (miVelocidad<=250)
+	 return FuerzaBaseAdelante*(miVelocidad/250*0.5+0.5);
+	 else if (miVelocidad<=750)
+	 return FuerzaBaseAdelante;
+	 else return FuerzaBaseAdelante*(-(miVelocidad-1000)/250);
+	 } 
+	 /** Devuelve la fuerza de aceleración del coche, de acuerdo al motor definido en la práctica 2
+		 * @return Fuerza de aceleración en Newtixels
+		 */
+		 public double fuerzaAceleracionAtras() {
+		 if (miVelocidad<=-350) return FuerzaBaseAtras;
+		 else if (miVelocidad<=0)
+		 return FuerzaBaseAtras*(-miVelocidad/200*0.7+0.3);
+		 else if (miVelocidad<=250)
+		 return FuerzaBaseAtras*(miVelocidad/250*0.55+0.3);
+		 else if (miVelocidad<=850)
+		 return FuerzaBaseAtras;
+		 else return FuerzaBaseAtras*(-(miVelocidad-1000)/250);
+		 } 
 }

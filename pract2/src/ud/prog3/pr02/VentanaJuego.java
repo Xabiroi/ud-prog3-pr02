@@ -232,13 +232,23 @@ public class VentanaJuego extends JFrame {
 			while (sigo) {
 				// Mover coche
 				miCoche.mueve( 0.040 );
-				if(flechas[0]==true){miCoche.acelera( +5, 1 );}
 				
-				if(flechas[1]==true){miCoche.acelera( -5, 1 );}
+				 double fuerzaAceleracion=0;
+			       
+			    
+			    
+				if(flechas[0]==true){fuerzaAceleracion = miCoche.fuerzaAceleracionAdelante();}
 				
+				if(flechas[1]==true){fuerzaAceleracion = -VentanaJuego.this.miCoche.fuerzaAceleracionAtras();}
+				
+				 MundoJuego.aplicarFuerza(fuerzaAceleracion,miCoche);
+				 
+				 
 				if(flechas[2]==true){miCoche.gira( +10 );}
 				
+				
 				if(flechas[3]==true){miCoche.gira( -10 );}
+				
 				
 				
 				

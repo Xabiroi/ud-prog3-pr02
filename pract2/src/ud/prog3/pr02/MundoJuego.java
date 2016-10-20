@@ -108,4 +108,54 @@ public class MundoJuego {
 		return vel + (acel*tiempo);
 	}
 	
+	
+	/**Calcula la fuerza del rozamiento
+	 * 
+	 * 
+	 * 
+	 * @param masa El peso del coche
+	 * @param coefRozSuelo La fuerza del rozamineto del suelo
+	 * @param coefRozAire La fuerza del rozamineto del aire
+	 * @param vel la velocidad (movimiento del coche)
+	 * @return La fuerza del rozamiento
+	 */
+public static double calcFuerzaRozamiento( double masa, double coefRozSuelo,
+ double coefRozAire, double vel ) {
+ double fuerzaRozamientoAire = coefRozAire * (-vel); // En contra del movimiento
+ double fuerzaRozamientoSuelo = masa * coefRozSuelo * ((vel>0)?(-1):1); // Contra mvto
+ return fuerzaRozamientoAire + fuerzaRozamientoSuelo;
+ } 	
+	
+/**
+ * Calcula la aceleracion del coche basandose en la 2ª ley de Newton
+ * 
+ * 
+ * @param fuerza Fuerza que hace el motor para mover el coche
+ * @param masa Peso del coche
+ * @return La velocidad
+ */
+
+public static double calcAceleracionConFuerza( double fuerza, double masa ) {
+ // 2ª ley de Newton: F = m*a ---> a = F/m
+ return fuerza/masa;
+ } 	
+
+
+public static void aplicarFuerza( double fuerza, Coche coche ) {
+	 double fuerzaRozamiento = calcFuerzaRozamiento( Coche.masa ,
+	 Coche.coefRozSuelo, Coche.coefRozAire, coche.getVelocidad() );
+	 double aceleracion = calcAceleracionConFuerza( fuerza+fuerzaRozamiento, Coche.masa );
+	 if (fuerza==0) {
+	 // No hay fuerza, solo se aplica el rozamiento
+	 double velAntigua = coche.getVelocidad();
+	 coche.acelera( aceleracion, 0.04 );
+	 if (velAntigua>=0 && coche.getVelocidad()<0
+	 || velAntigua<=0 && coche.getVelocidad()>0) {
+	 coche.setVelocidad(0); // Si se está frenando, se para (no anda al revés)
+	 }
+	 } else {
+	 coche.acelera( aceleracion, 0.04 );
+	 } 
+}
+	
 }
